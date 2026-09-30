@@ -1,0 +1,39 @@
+<h2>Usuarios</h2>
+
+@if (users.length > 0) {
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Apellido</th>
+          <th>Usuario</th>
+          <th>Email</th>
+          <th>Roles</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (user of users; track user.id) {
+          <tr>
+            <td>{{ user.id }}</td>
+            <td>{{ user.name }}</td>
+            <td>{{ user.lastname }}</td>
+            <td>{{ user.username }}</td>
+            <td>{{ user.email }}</td>
+            <td>
+              @for (role of user.roles; track role.id) {
+                <span class="badge text-bg-secondary me-1">
+                  {{ role.name }}
+                </span>
+              }
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+} @else {
+  <p>No hay usuarios para mostrar.</p>
+}
