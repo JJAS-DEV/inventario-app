@@ -5,14 +5,14 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class UserServiceService {
+export class UserService {
   private url:string = 'http://localhost:8080/api/users';  
 
 
   constructor(private http: HttpClient ) { }
   
-   findAllPageable(page:number):Observable<any>{
-    return this.http.get<any>(this.url+"/page/"+page);
+   findAllPageable(page:number,size:Number):Observable<any>{
+    return this.http.get<any>(this.url+"?page="+page+"&size="+size);
   }
 
 
