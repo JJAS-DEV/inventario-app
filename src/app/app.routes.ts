@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
-import { UserComponent } from './user/user.component';
+import { UserComponent } from './components/user/user.component';
 
 export const routes: Routes = [
 {
-     path: 'users/page/:page',
+     path: 'users/page/:page/size/:size',
         component: UserComponent
 }
     
