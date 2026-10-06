@@ -17,9 +17,10 @@ export class PaginacionComponent {
   
   // Tamaño del bloque de páginas visibles
 
+  
 get visiblePages(): number[] {
-  const totalPages = this.paginator?.totalPages ?? 0;
-  const currentPage = this.paginator?.number ?? 0;
+  const totalPages = this.paginator.page?.totalPages ?? 0;
+  const currentPage = this.paginator.page?.number ?? 0;
   const count = Math.min(this.blockSize, totalPages);
 
   if (count === 0) return [];
