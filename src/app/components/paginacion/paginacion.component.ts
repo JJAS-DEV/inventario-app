@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 @Component({
@@ -7,10 +7,15 @@ import { RouterModule } from '@angular/router';
   templateUrl: './paginacion.component.html',
   styleUrl: './paginacion.component.css'
 })
-export class PaginacionComponent {
+export class PaginacionComponent implements OnInit {
+  ngOnInit(): void {
+    console.log('PaginacionComponent  hola initialized with url:', this.url);
+    this.visiblePages;
+  }
     @Input() url: string = '';
   @Input() paginator:any={};
   @Input()size:number=5;
+
 
 
   blockSize: number = 5;
@@ -19,9 +24,12 @@ export class PaginacionComponent {
 
   
 get visiblePages(): number[] {
-  const totalPages = this.paginator.page?.totalPages ?? 0;
-  const currentPage = this.paginator.page?.number ?? 0;
+  
+  const totalPages = this.paginator.page?.totalPages ?? 0!;
+  const currentPage = this.paginator.page?.number ?? 0!;
+  
   const count = Math.min(this.blockSize, totalPages);
+
 
   if (count === 0) return [];
 

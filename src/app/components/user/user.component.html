@@ -1,61 +1,189 @@
-<div class="d-flex justify-content-between align-items-center mb-3">
+<div class=" justify-content-between align-items-center mb-3">
   <h2 class="mb-0">Usuarios</h2>
+@if(!mostrarFiltros) {
+  <div class="my-2">
+  <button
+    type="button"
+    class="btn btn-outline-primary"
+    (click)="mostrarFiltros = true"
+  >
+    Mostrar filtros
+  </button>
+</div>
+}
 
-  <input
-    type="number"
-    class="form-control"
-    style="width: 90px"
-    min="2"
-    max="50"
-    step="1"
-    value="5"
-    aria-label="Cantidad de usuarios por página"
-    (keydown)="
+@if (mostrarFiltros) {
+  <div class="row g-2 mb-3 my-2 border rounded p-3">
+    <div class="col-12 d-flex justify-content-between align-items-center mb-2">
+      <h5 class="mb-0">Filtros</h5>
+
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Cerrar filtros"
+        (click)="mostrarFiltros = false"
+      ></button>
+    </div>
+
+    <!-- Buscador de nombre -->
+    <div class="col-12">
+      <div class="d-flex align-items-start gap-2">
+        <label for="nombreUsuario" class="form-label mt-2 mb-0">Nombre</label>
+
+        <div class="position-relative flex-grow-1">
+          <input
+            id="nombreusuario"
+            class="form-control"
+            placeholder="Nombre de usuario"
+            [(ngModel)]="nombreusuario"
+            (ngModelChange)="buscarNombre($event)"
+            (focus)="mostrarOpcionesNombre = true"
+            (blur)="ocultarOpcionesNombre()"
+            autocomplete="off"
+          />
+
+          @if (mostrarOpcionesNombre && opcionesNombre.length > 0) {
+            <div class="list-group username-opciones">
+              @for (opcion of opcionesNombre; track opcion) {
+                <button
+                  type="button"
+                  class="list-group-item list-group-item-action"
+                  (click)="seleccionarNombre(opcion)"
+                >
+                  {{ opcion }}
+                </button>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Buscador de email -->
+    <div class="col-12">
+      <div class="d-flex align-items-start gap-2">
+        <label for="correoUsuario" class="form-label mt-2 mb-0">Email</label>
+
+        <div class="position-relative flex-grow-1">
+          <input
+            id="correoUsuario"
+            class="form-control"
+            placeholder="Correo"
+            [(ngModel)]="correoUsuario"
+            (ngModelChange)="buscarcorreoUsuario($event)"
+            (focus)="mostrarOpcionesemail = true"
+            (blur)="ocultarOpcionenEmail()"
+            autocomplete="off"
+          />
+
+          @if (mostrarOpcionesemail && opcionesEmail.length > 0) {
+            <div class="list-group username-opciones">
+              @for (opcion of opcionesEmail; track opcion) {
+                <button
+                  type="button"
+                  class="list-group-item list-group-item-action"
+                  (click)="seleccionarEmail(opcion)"
+                >
+                  {{ opcion }}
+                </button>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Buscador de username -->
+    <div class="col-12">
+      <div class="d-flex align-items-start gap-2">
+        <label for="username" class="form-label mt-2 mb-0">Username</label>
+
+        <div class="position-relative flex-grow-1">
+          <input
+            id="username"
+            class="form-control"
+            placeholder="Username"
+            [(ngModel)]="username"
+            (ngModelChange)="buscarUsername($event)"
+            (focus)="mostrarOpcionesusername = true"
+            (blur)="ocultarOpcionesUsername()"
+            autocomplete="off"
+          />
+
+          @if (mostrarOpcionesusername && opcionesUsername.length > 0) {
+            <div class="list-group username-opciones">
+              @for (opcion of opcionesUsername; track opcion) {
+                <button
+                  type="button"
+                  class="list-group-item list-group-item-action"
+                  (click)="seleccionarUsername(opcion)"
+                >
+                  {{ opcion }}
+                </button>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <button class="btn btn-primary" type="button" (click)="buscar()">
+        Buscar
+      </button>
+    </div>
+  </div>
+}
+
+</div>
+
+@if (users.length > 0) {
+<div class="table-responsive">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>Usuario</th>
+        <th>Email</th>
+        <th>Roles</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      @for (user of users; track user.id) {
+      <tr>
+        <td>{{ user.id }}</td>
+        <td>{{ user.name }}</td>
+        <td>{{ user.lastname }}</td>
+        <td>{{ user.username }}</td>
+        <td>{{ user.email }}</td>
+        <td>
+          @for (role of user.roles; track role.id) {
+          <span class="badge text-bg-secondary me-1">
+            {{ role.name }}
+          </span>
+          }
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</div>
+} @else {
+<p>No hay usuarios para mostrar.</p>
+}
+<div>
+  @if(paginator && paginator.page) {
+  <app-paginacion [paginator]="paginator" [url]="url" [size]="size"></app-paginacion>
+  <input type="number" class="form-control" style="width: 90px" min="2" max="50" step="1" value="5"
+    aria-label="Cantidad de usuarios por página" (keydown)="
       $event.key !== 'ArrowUp' &&
       $event.key !== 'ArrowDown' &&
       $event.key !== 'Tab' &&
       $event.preventDefault()
-    "
-    (blur)="actualizarCantidad($event)"
-  />
+    " (blur)="actualizarCantidad($event)" />
+  }
+
 </div>
-
-@if (users.length > 0) {
-  <div class="table-responsive">
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Nombre</th>
-          <th>Apellido</th>
-          <th>Usuario</th>
-          <th>Email</th>
-          <th>Roles</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        @for (user of users; track user.id) {
-          <tr>
-            <td>{{ user.id }}</td>
-            <td>{{ user.name }}</td>
-            <td>{{ user.lastname }}</td>
-            <td>{{ user.username }}</td>
-            <td>{{ user.email }}</td>
-            <td>
-              @for (role of user.roles; track role.id) {
-                <span class="badge text-bg-secondary me-1">
-                  {{ role.name }}
-                </span>
-              }
-            </td>
-          </tr>
-        }
-      </tbody>
-    </table>
-  </div>
-} @else {
-  <p>No hay usuarios para mostrar.</p>
-}
-
-<app-paginacion [paginator]="paginator" [url]="url" [size]="size" ></app-paginacion>
