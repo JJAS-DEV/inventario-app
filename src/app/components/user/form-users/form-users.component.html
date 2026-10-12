@@ -1,0 +1,105 @@
+<div class="container mt-4">
+  <div class="card shadow">
+    <div class="card-header bg-primary text-white">
+      <h5 class="mb-0">Formulario de Usuario</h5>
+    </div>
+    <div class="card-body">
+      <form (ngSubmit)="onSubmit(userForm)" #userForm="ngForm">
+        <div class="mb-3">
+          <label for="name" class="form-label">Nombre</label>
+          <input type="text" class="form-control" [(ngModel)]="user.name" id="name" name="name" required>
+        </div>
+           @if(errors?.name){
+                    <div class="class text-danger">
+                        {{errors.name}}
+                    </div>
+                    }
+
+        <div class="mb-3">
+          <label for="lastname" class="form-label">Apellido</label>
+          <input type="text" class="form-control" [(ngModel)]="user.lastname" id="lastname" name="lastname" required>
+        </div>
+          @if(errors?.lastname){
+                    <div class="class text-danger">
+                        {{errors.lastname}}
+                    </div>
+                    }
+
+        <div class="mb-3">
+          <label for="email" class="form-label">Correo electrónico</label>
+          <input type="email" class="form-control" [(ngModel)]="user.email" id="email" name="email" required>
+        </div>
+
+           @if(errors?.email){
+                    <div class="class text-danger">
+                        {{errors.email}}
+                    </div>
+                    }
+
+        <div class="mb-3">
+          <label for="username" class="form-label">Usuario</label>
+          <input type="text" class="form-control" [(ngModel)]="user.username" id="username" name="username" required>
+        </div>
+
+              @if(errors?.username){
+                    <div class="class text-danger">
+                        {{errors.username}}
+                    </div>
+                    }
+
+        <div class="mb-3">
+          <label for="password" class="form-label">Contraseña</label>
+          <input type="password" class="form-control" [(ngModel)]="user.password" id="password" name="password"
+            required>
+        </div>
+
+         @if(errors?.password){
+                    <div class="class text-danger">
+                        {{errors.password}}
+                    </div>
+                    }
+
+      <div class="mb-3">
+  <label class="form-label">Roles</label>
+  <div>
+    @for (role of roles; track role) {
+      <div class="form-check">
+        <input 
+          class="form-check-input" 
+          type="checkbox" 
+          [checked]="selectedRolesList.includes(role)" 
+          (click)="toggleRole(role)">
+        <label class="form-check-label">
+          {{ role.name }}
+        </label>
+      </div>
+    }
+  </div>
+</div>
+
+  @if(errors?.roles){
+                    <div class="class text-danger">
+                        {{errors.roles}}
+                    </div>
+                    }
+
+<!-- Mostrar la lista acumulada -->
+<div class="mt-2">
+  <p>Lista de roles seleccionados:</p>
+  @for (role of selectedRolesList; track role) {
+    <span class="badge bg-primary my-1 gap-2 me-1">
+      {{ role.name }}
+      <button type="button" class="btn-close btn-close-white ms-1" (click)="toggleRole(role)"></button>
+    </span>
+  }
+  
+</div>
+
+
+
+
+        <button type="submit" class="btn btn-success">Guardar</button>
+      </form>
+    </div>
+  </div>
+</div>

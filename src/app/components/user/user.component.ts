@@ -68,6 +68,15 @@ public buscar(): void {
   this.cargarUsuarios();
 }
 
+
+crearUsuario(): void {
+  
+  this.router.navigate(['/usersForm']);
+}
+// editarUsuario(id:number):void{
+
+//   this.router.navigate(['users/edit/'+id])
+// }
 // ---------------------filtrado
 
 
@@ -83,7 +92,7 @@ public buscar(): void {
   mostrarOpcionesemail = false;
   mostrarOpcionesNombre = false;
 
-
+//buscar por nombre, correo y username
 
   buscarUsername(texto: string): void {
     console.log('Texto escrito:', texto);
@@ -173,6 +182,11 @@ public buscar(): void {
       this.mostrarOpcionesNombre = false;
     }, 150);
   }
-
+    limpiarFiltros(): void {
+      this.nombreusuario = '';
+      this.correoUsuario = '';
+      this.username = '';
+      this.cargarUsuarios();
+    }
 
 }
