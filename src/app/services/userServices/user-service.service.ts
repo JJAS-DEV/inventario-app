@@ -2,6 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { User } from '../../models/User';
+import { Role } from '../../models/Role';
 
 @Injectable({
   providedIn: 'root'
@@ -67,7 +68,17 @@ export class UserService {
   // agregando user nuevo
   create(user:User):Observable<User>{
     return this.http.post<User>(this.url,user);
-  }   
+  }
+  //  muesto todos los roles   
+  rolesALl():Observable<Role[]>{
+    return this.http.get<Role[]>(this.url+"/All-Roles");
+  }
+
+  //editando un usuario
+
+   update(user:User):Observable<User>{
+    return this.http.put<User>(this.url+"/"+user.id,user);
+  }
 
 
 }

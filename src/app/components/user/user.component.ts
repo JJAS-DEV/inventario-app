@@ -73,10 +73,10 @@ crearUsuario(): void {
   
   this.router.navigate(['/usersForm']);
 }
-// editarUsuario(id:number):void{
+editarUsuario(id:number):void{
 
-//   this.router.navigate(['users/edit/'+id])
-// }
+  this.router.navigate(['/users/edit/'+id])
+}
 // ---------------------filtrado
 
 

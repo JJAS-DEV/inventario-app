@@ -16,6 +16,7 @@ import { UserService } from '../../../services/userServices/user-service.service
 export class FormUsersComponent implements OnInit {
   user: User;
   errors: any = {};
+  editar:boolean=false;
 
   constructor(private serviceUsers:UserService,private sharingUser: SharingUSerService, private route:ActivatedRoute) {
     this.user = new User();
@@ -27,19 +28,25 @@ export class FormUsersComponent implements OnInit {
 
 
         this.sharingUser.errorFormEventEmitter.subscribe(error=>this.errors=error);
+        this.serviceUsers.rolesALl().subscribe(role=>{
+          this.roles=role
+        })
 
-    //  this.route.paramMap.subscribe(params=>{
-    //   const id:number=+(params.get('id')||'0');
+     this.route.paramMap.subscribe(params=>{
+      const id:number=+(params.get('id')||'0');
 
-    //   if(id>0){
-    //     // this.SharingData.findUserByIdEventEmitter.emit(id);
-    //     this.serviceUsers.findById(id).subscribe(user => {
-    //       this.user = user;
-    //     });
+      if(id>0){
+        // this.SharingData.findUserByIdEventEmitter.emit(id);
+        this.serviceUsers.findById(id).subscribe(user => {
+          this.user = user;
+          this.selectedRolesList=[...this.user.roles]
+        });
 
-    //   }
-    // }
-    // )
+        this.editar=true;
+
+      }
+    }
+    )
 
 
 
@@ -49,9 +56,10 @@ export class FormUsersComponent implements OnInit {
 
     this.user.roles=[...this.selectedRolesList]
 
-      this.sharingUser.newUserEventEmitter.emit(this.user);
     // if (userForm.valid) {
       console.log(this.user)
+
+
       this.sharingUser.addUser(this.user);
 
   
@@ -63,25 +71,26 @@ export class FormUsersComponent implements OnInit {
   onClear(userForm: NgForm):void{
     userForm.reset();
     userForm.resetForm();
+    this.selectedRolesList=[]
 
     
   }
 
-  roles: Role[] = [{id:1,name:'ADMIN'}, {id:2,name:'USER'}, {id:3,name:'MANAGER'}]; // opciones disponibles
+  roles: Role[] = []; // opciones disponibles
   selectedRolesList: Role[] = [];  
 
 
    
 
- toggleRole(role: Role): void {
-    if (this.selectedRolesList.includes(role)) {
-      // Si ya estaba seleccionado, lo quitamos
-      this.selectedRolesList = this.selectedRolesList.filter(r => r !== role);
-    } else {
-      // Si no estaba, lo agregamos
-      this.selectedRolesList.push(role);
-    }
+toggleRole(role: Role): void {
+  if (this.selectedRolesList.some(r => r.id === role.id)) {
+    this.selectedRolesList = this.selectedRolesList.filter(r => r.id !== role.id);
+  } else {
+    this.selectedRolesList.push(role);
   }
-
+}
+isRoleSelected(role: Role): boolean {
+  return this.selectedRolesList.some(r => r.id === role.id);
+}
 
 }

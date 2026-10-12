@@ -2,6 +2,8 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { User } from '../../../models/User';
 import { UserService } from '../user-service.service';
 import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
+
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +25,7 @@ export class SharingUSerService {
     return this._errorFormEventEmitter;
   }
 
-   get selectUserEventEmitter ():EventEmitter<User>{
+  get selectUserEventEmitter(): EventEmitter<User> {
     return this._selectUserEventEmitter;
 
   }
@@ -33,23 +35,75 @@ export class SharingUSerService {
 
   addUser(user: User) {
 
+    if (user.id > 0) {
 
-    this.userservice.create(user).subscribe({
-      next: () => {
+      this.userservice.update(user).subscribe({
+        next: () => {
 
-        this.router.navigate(['users/page/0/size/5'])
+          Swal.fire({
+            title: 'Usuario actualizado',
+            text: 'Los cambios se guardaron correctamente',
+            icon: 'success',
+            confirmButtonText: 'OK'
+          }).then(() => {
+            this.router.navigate(['users/page/0/size/5']);
+          });
 
 
-      },
-      error: (err) => {
-        if (err.status == 400) {
-          this.errorFormEventEmitter.emit(err.error);
-          console.log(err.error);
+
+        },
+       error: (err) => {
+          if (err.status == 400) {
+            this.errorFormEventEmitter.emit(err.error);
+            console.log(err.error);
+
+            Swal.fire({
+              title: 'Error de validación',
+              text: 'Revisa los campos del formulario',
+              icon: 'error',
+              confirmButtonText: 'Entendido'
+            });
+          }
         }
 
-      }
 
-    });
+
+
+      });
+
+
+    } else {
+
+      this.userservice.create(user).subscribe({
+
+        next: () => {
+          Swal.fire({
+            title: 'Usuario creado',
+            text: 'El usuario se registró correctamente',
+            icon: 'success',
+            confirmButtonText: 'OK'
+          }).then(() => {
+            this.router.navigate(['users/page/0/size/5']);
+          });
+        },
+        error: (err) => {
+          if (err.status == 400) {
+            this.errorFormEventEmitter.emit(err.error);
+            console.log(err.error);
+
+            Swal.fire({
+              title: 'Error de validación',
+              text: 'Revisa los campos del formulario',
+              icon: 'error',
+              confirmButtonText: 'Entendido'
+            });
+          }
+        }
+
+      });
+    }
+
+
   }
 
 }
