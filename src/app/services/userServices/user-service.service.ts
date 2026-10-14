@@ -59,25 +59,32 @@ export class UserService {
   }
 
 
-  findById(id:number){
-        return this.http.get<any>(this.url + "/"+id);
+  findById(id: number) {
+    return this.http.get<any>(this.url + "/" + id);
 
   }
 
 
   // agregando user nuevo
-  create(user:User):Observable<User>{
-    return this.http.post<User>(this.url,user);
+  create(user: User): Observable<User> {
+    return this.http.post<User>(this.url, user);
   }
   //  muesto todos los roles   
-  rolesALl():Observable<Role[]>{
-    return this.http.get<Role[]>(this.url+"/All-Roles");
+  rolesALl(): Observable<Role[]> {
+    return this.http.get<Role[]>(this.url + "/All-Roles");
   }
 
   //editando un usuario
 
-   update(user:User):Observable<User>{
-    return this.http.put<User>(this.url+"/"+user.id,user);
+  update(user: User): Observable<User> {
+    return this.http.put<User>(this.url + "/" + user.id, user);
+  }
+
+  eliminar(id:number){
+
+        return this.http.delete<User>(this.url +"/"+id);
+
+
   }
 
 

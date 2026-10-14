@@ -141,6 +141,11 @@
             editar
           </button>
         </td>
+        <td>
+          <button type="button" class="btn btn-danger my-2 btn-sm" (click)="eliminar(user.id)">
+            eliminar
+          </button>
+        </td>
       </tr>
       }
     </tbody>
@@ -151,15 +156,13 @@
 }
 <div>
   @if(paginator && paginator.page) {
-  <app-paginacion [paginator]="paginator" [url]="url" [size]="size"></app-paginacion>
-  <input type="number" class="form-control" style="width: 90px" min="5" max="50" step="5" value="5"
-    aria-label="Cantidad de usuarios por página" (keydown)="
 
-      $event.key !== 'ArrowUp' &&
-      $event.key !== 'ArrowDown' &&
-      $event.key !== 'Tab' &&
-      $event.preventDefault()
-    " (blur)="actualizarCantidad($event)" />
+  <div class="d-flex justify-content-center align-items-center gap-3 my-3">
+    <app-paginacion [paginator]="paginator" [url]="url" [size]="size"></app-paginacion>
+
+    <input type="number" class="form-control" style="width: 90px" min="1" [max]="paginator.page.totalElements" step="5"
+      [(ngModel)]="size" aria-label="Cantidad de usuarios por página" (blur)="actualizarCantidad($event)" />
+  </div>
   }
 
 

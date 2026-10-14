@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { User } from '../../models/User';
 import { UserService } from '../../services/userServices/user-service.service';
 import { PaginacionComponent } from '../paginacion/paginacion.component';
 import { HttpParams } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { SharingUSerService } from '../../services/userServices/sharingDataUser/sharing-user.service';
 
 @Component({
 
@@ -15,7 +16,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class UserComponent implements OnInit {
 
-
+  private sharingUser = inject(SharingUSerService);
 
 
 
@@ -25,6 +26,7 @@ export class UserComponent implements OnInit {
   size: number = 5;
   constructor(private router: Router, private service: UserService,
     private route: ActivatedRoute
+    
   ) {
 
   }
@@ -38,14 +40,27 @@ export class UserComponent implements OnInit {
     });
   }
 
-  actualizarCantidad(e: Event): void {
+actualizarCantidad(e: Event): void {
     const input = e.target as HTMLInputElement;
+      let value = input.valueAsNumber;
 
-    if (input.value === '' || !input.validity.valid) {
-      return;
-    }
 
-    this.size = input.valueAsNumber; // queda guardado en el estado
+   
+    
+      if (isNaN(value)) {
+    value = 5;
+  }
+
+  // Si es negativo, poner 5
+  if (value < 0) {
+    value = 5;
+  }
+  // Si es mayor al límite, dejar en 12
+  else if (value > this.paginator.page.totalElements) {
+    value =  this.paginator.page.totalElements;
+  }// queda guardado en el estado
+
+   this.size=value;
     this.cargarUsuarios();          // conserva la página obtenida de la URL
   }
 
@@ -76,6 +91,9 @@ crearUsuario(): void {
 editarUsuario(id:number):void{
 
   this.router.navigate(['/users/edit/'+id])
+}
+eliminar(id:number):void{
+  this.sharingUser.eliminarById(id);
 }
 // ---------------------filtrado
 

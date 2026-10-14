@@ -37,6 +37,7 @@ export class FormUsersComponent implements OnInit {
 
       if(id>0){
         // this.SharingData.findUserByIdEventEmitter.emit(id);
+        this.user.id=id;
         this.serviceUsers.findById(id).subscribe(user => {
           this.user = user;
           this.selectedRolesList=[...this.user.roles]
