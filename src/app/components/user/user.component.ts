@@ -40,14 +40,27 @@ export class UserComponent implements OnInit {
     });
   }
 
-  actualizarCantidad(e: Event): void {
+actualizarCantidad(e: Event): void {
     const input = e.target as HTMLInputElement;
+      let value = input.valueAsNumber;
 
-    if (input.value === '' || !input.validity.valid) {
-      return;
-    }
 
-    this.size = input.valueAsNumber; // queda guardado en el estado
+   
+    
+      if (isNaN(value)) {
+    value = 5;
+  }
+
+  // Si es negativo, poner 5
+  if (value < 0) {
+    value = 5;
+  }
+  // Si es mayor al límite, dejar en 12
+  else if (value > this.paginator.page.totalElements) {
+    value =  this.paginator.page.totalElements;
+  }// queda guardado en el estado
+
+   this.size=value;
     this.cargarUsuarios();          // conserva la página obtenida de la URL
   }
 
