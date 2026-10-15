@@ -1,4 +1,136 @@
-<p>proveedor works!</p>
+
+<h1>Proveedores</h1>  
+  
+@if(!mostrarFiltros) {
+  <div class="my-2">
+    <button type="button" class="btn btn-outline-primary" (click)="mostrarFiltros = true">
+      Mostrar filtros
+    </button>
+  </div>
+}
+
+@if (mostrarFiltros) {
+  <div class="row g-2 mb-3 my-2 border rounded p-3">
+    <div class="col-12 d-flex justify-content-between align-items-center mb-2">
+      <h5 class="mb-0">Filtros de Proveedores</h5>
+      <button type="button" class="btn-close" aria-label="Cerrar filtros" (click)="mostrarFiltros = false"></button>
+    </div>
+
+    <!-- Buscador de nombre -->
+    <div class="col-12">
+      <div class="d-flex align-items-start gap-2">
+        <label for="nombre" class="form-label mt-2 mb-0">Nombre</label>
+        <div class="position-relative flex-grow-1">
+          <input id="nombre" class="form-control" placeholder="Nombre proveedor"
+            [(ngModel)]="proveedorBuscador.nombre" (ngModelChange)="buscarNombre($event)"
+            (focus)="mostrarOpcionesNombre = true" (blur)="ocultarOpcionesNombre()" autocomplete="off" />
+
+          @if (mostrarOpcionesNombre && opcionesNombre.length > 0) {
+            <div class="list-group opciones">
+              @for (opcion of opcionesNombre; track opcion) {
+                <button type="button" class="list-group-item list-group-item-action"
+                  (click)="seleccionarNombre(opcion)">
+                  {{ opcion }}
+                </button>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Buscador de RUT -->
+    <div class="col-12">
+      <div class="d-flex align-items-start gap-2">
+        <label for="rut" class="form-label mt-2 mb-0">RUT</label>
+        <div class="position-relative flex-grow-1">
+          <input id="rut" class="form-control" placeholder="RUT proveedor"
+            [(ngModel)]="proveedorBuscador.rut" (ngModelChange)="buscarRut($event)"
+            (focus)="mostrarOpcionesRut = true" (blur)="ocultarOpcionesRut()" autocomplete="off" />
+
+          @if (mostrarOpcionesRut && opcionesRut.length > 0) {
+            <div class="list-group opciones">
+              @for (opcion of opcionesRut; track opcion) {
+                <button type="button" class="list-group-item list-group-item-action"
+                  (click)="seleccionarRut(opcion)">
+                  {{ opcion }}
+                </button>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Buscador de email -->
+    <div class="col-12">
+      <div class="d-flex align-items-start gap-2">
+        <label for="email" class="form-label mt-2 mb-0">Email</label>
+        <div class="position-relative flex-grow-1">
+          <input id="email" class="form-control" placeholder="Correo proveedor"
+            [(ngModel)]="proveedorBuscador.email" (ngModelChange)="buscarEmail($event)"
+            (focus)="mostrarOpcionesEmail = true" (blur)="ocultarOpcionesEmail()" autocomplete="off" />
+
+          @if (mostrarOpcionesEmail && opcionesEmail.length > 0) {
+            <div class="list-group opciones">
+              @for (opcion of opcionesEmail; track opcion) {
+                <button type="button" class="list-group-item list-group-item-action"
+                  (click)="seleccionarEmail(opcion)">
+                  {{ opcion }}
+                </button>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Buscador de teléfono -->
+    <div class="col-12">
+      <div class="d-flex align-items-start gap-2">
+        <label for="telefono" class="form-label mt-2 mb-0">Teléfono</label>
+        <div class="position-relative flex-grow-1">
+          <input id="telefono" class="form-control" placeholder="Teléfono proveedor"
+            [(ngModel)]="proveedorBuscador.telefono" (ngModelChange)="buscarTelefono($event)"
+            (focus)="mostrarOpcionesTelefono = true" (blur)="ocultarOpcionesTelefono()" autocomplete="off" />
+
+          @if (mostrarOpcionesTelefono && opcionesTelefono.length > 0) {
+            <div class="list-group opciones">
+              @for (opcion of opcionesTelefono; track opcion) {
+                <button type="button" class="list-group-item list-group-item-action"
+                  (click)="seleccionarTelefono(opcion)">
+                  {{ opcion }}
+                </button>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Filtro de estado activo -->
+<div class="col-12">
+  <div class="d-flex align-items-start gap-2">
+    <label for="activo" class="form-label mt-2 mb-0">Activo</label>
+    <select id="activo" class="form-select" [(ngModel)]="proveedorBuscador.activo">
+      <option [ngValue]="null">Todos</option>
+      <option [ngValue]="true">Sí</option>
+      <option [ngValue]="false">No</option>
+    </select>
+  </div>
+</div>
+
+    <!-- Botones -->
+    <div class="col-12 gap-2 d-flex justify-content-end">
+      <button class="btn btn-primary" type="button" (click)="buscar()">
+        Buscar
+      </button>
+      <button class="btn btn-secondary" type="button" (click)="limpiarFiltros()">
+        Limpiar filtros
+      </button>
+    </div>
+  </div>
+}
 
 
 <div class="table-responsive">
