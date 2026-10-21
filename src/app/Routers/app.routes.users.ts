@@ -1,6 +1,6 @@
 import { Routes } from "@angular/router";
-import { FormUsersComponent } from "./components/user/form-users/form-users.component";
-import { UserComponent } from "./components/user/user.component";
+import { FormUsersComponent } from "../components/user/form-users/form-users.component";
+import { UserComponent } from "../components/user/user.component";
 
 
 export const routersUSers: Routes =

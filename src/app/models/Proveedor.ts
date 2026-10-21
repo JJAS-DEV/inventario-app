@@ -5,5 +5,5 @@ export class Proveedor {
     telefono!: string;
     email!: string;
     direccion!: string;
-activo: boolean | null = null;
+    activo: boolean | null = null;
 }

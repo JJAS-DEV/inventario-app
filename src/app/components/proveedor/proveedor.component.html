@@ -113,7 +113,6 @@
   <div class="d-flex align-items-start gap-2">
     <label for="activo" class="form-label mt-2 mb-0">Activo</label>
     <select id="activo" class="form-select" [(ngModel)]="proveedorBuscador.activo">
-      <option [ngValue]="null">Todos</option>
       <option [ngValue]="true">Sí</option>
       <option [ngValue]="false">No</option>
     </select>
@@ -131,6 +130,13 @@
     </div>
   </div>
 }
+
+
+
+<button type="button" class="btn btn-success my-2" (click)="crearProveedor()">
+  Crear Proveedor
+</button>
+
 
 
 <div class="table-responsive">
@@ -164,12 +170,12 @@
                     </span>
                 </td>
                 <td>
-                    <button type="button" class="btn btn-success my-2 btn-sm">
+                    <button type="button" class="btn btn-success my-2 btn-sm" (click)="editarUsuario(proveedor.idProveedor)">
                         editar
                     </button>
                 </td>
                 <td>
-                    <button type="button" class="btn btn-danger my-2 btn-sm">
+                    <button type="button" class="btn btn-danger my-2 btn-sm"  (click)="eliminar(proveedor.idProveedor)">
                         eliminar
                     </button>
                 </td>
