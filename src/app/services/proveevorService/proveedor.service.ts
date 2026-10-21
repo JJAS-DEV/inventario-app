@@ -1,6 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Proveedor } from '../../models/Proveedor';
 
 @Injectable({
   providedIn: 'root'
@@ -15,9 +16,28 @@ export class ProveedorService {
     return this.http.get<any>(this.url + "?page=" + page + "&size=" + size);
   }
 
+
+  create(proveedor: Proveedor): Observable<Proveedor> {
+    return this.http.post<Proveedor>(this.url, proveedor);
+  }
+  update(proveedor: Proveedor): Observable<Proveedor> {
+    return this.http.put<Proveedor>(this.url + "/" + proveedor.idProveedor, proveedor);
+  }
+ findById(id: number) {
+    return this.http.get<any>(this.url + "/" + id);
+
+  }
+
+  eliminar(id:number){
+
+        return this.http.delete<Proveedor>(this.url +"/"+id);
+
+
+  }
+
   // --- Filtro general con paginación ---
 
-  filtrarProveedores(nombre?: string, rut?: string, email?: string, telefono?: string,activo?:boolean, page = 0, size = 5): Observable<any> {
+  filtrarProveedores(nombre?: string, rut?: string, email?: string, telefono?: string, activo?: boolean, page = 0, size = 5): Observable<any> {
     let params = new HttpParams()
       .set('page', page)
       .set('size', size);
@@ -37,7 +57,7 @@ export class ProveedorService {
     if (telefono?.trim()) {
       params = params.set('telefono', telefono.trim());
     }
-  if (activo !== null && activo !== undefined) params = params.set('activo', activo.toString());    
+    if (activo !== null && activo !== undefined) params = params.set('activo', activo.toString());
 
     return this.http.get<any>(`${this.url}/filtrar`, { params });
   }

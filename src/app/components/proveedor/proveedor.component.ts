@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ProveedorService } from '../../services/proveevorService/proveedor.service';
 import { PaginacionComponent } from '../paginacion/paginacion.component';
 import { FormsModule } from '@angular/forms';
+import { EventosService } from '../../services/proveevorService/ProveedorEvento/eventos.service';
 
 @Component({
   selector: 'app-proveedor',
@@ -21,12 +22,12 @@ export class ProveedorComponent implements OnInit {
   total: number = 0;
 
   constructor(private router: Router, private service: ProveedorService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,private serviceEvento: EventosService
 
   ) {
     this.proveedorBuscador = new Proveedor();
-    this.proveedorBuscador.activo=null;
-  
+    this.proveedorBuscador.activo = null;
+
   }
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
@@ -37,7 +38,7 @@ export class ProveedorComponent implements OnInit {
 
   private cargarProveedor(): void {
     this.service.filtrarProveedores(this.proveedorBuscador.nombre, this.proveedorBuscador.rut,
-      this.proveedorBuscador.email, this.proveedorBuscador.telefono,this.proveedorBuscador.activo!
+      this.proveedorBuscador.email, this.proveedorBuscador.telefono, this.proveedorBuscador.activo!
       , this.page, this.size).subscribe(pageable => {
         this.proveedor = pageable.content as Proveedor[];
         this.paginator = pageable;
@@ -70,6 +71,20 @@ export class ProveedorComponent implements OnInit {
     this.size = value;
     this.cargarProveedor();          // conserva la página obtenida de la URL
   }
+
+
+
+  crearProveedor(): void {
+    this.router.navigate(['/ProvedorForm']);
+  }
+  editarUsuario(id: number): void {
+
+    this.router.navigate(['/proveedor/edit/' + id])
+  }
+  eliminar(id: number): void {
+    this.serviceEvento.eliminarById(id);
+  }
+
 
 
   // filtrado proveedor
@@ -196,6 +211,7 @@ export class ProveedorComponent implements OnInit {
     this.proveedorBuscador.rut = '';
     this.proveedorBuscador.email = '';
     this.proveedorBuscador.telefono = '';
+    this.proveedorBuscador.activo = null;
     this.cargarProveedor(); // método que recarga la lista general
   }
 

@@ -1,0 +1,80 @@
+<div class="container mt-4">
+  <div class="card shadow">
+    <div class="card-header bg-primary text-white">
+      <h5 class="mb-0">Formulario de Proveedor para {{ editar ? "editar" : "crear" }}</h5>
+    </div>
+    <div class="card-body">
+      <form (ngSubmit)="onSubmit(providerForm)" #providerForm="ngForm">
+
+        <!-- Nombre -->
+        <div class="mb-3">
+          <label for="nombre" class="form-label">Nombre</label>
+          <input type="text" class="form-control" [(ngModel)]="proveedor.nombre" id="nombre" name="nombre" required>
+        </div>
+        @if(errors?.nombre){
+        <div class="text-danger">{{ errors.nombre }}</div>
+        }
+
+        <!-- RUT -->
+        <div class="mb-3">
+          <label for="rut" class="form-label">RUT</label>
+          <input type="text" class="form-control" [(ngModel)]="proveedor.rut" id="rut" name="rut" required>
+        </div>
+        @if(errors?.rut){
+        <div class="text-danger">{{ errors.rut }}</div>
+        }
+
+        <!-- Email -->
+        <div class="mb-3">
+          <label for="email" class="form-label">Correo electrónico</label>
+          <input type="email" class="form-control" [(ngModel)]="proveedor.email" id="email" name="email" required>
+        </div>
+        @if(errors?.email){
+        <div class="text-danger">{{ errors.email }}</div>
+        }
+
+        <!-- Teléfono -->
+        <div class="mb-3">
+          <label for="telefono" class="form-label">Teléfono</label>
+          <input type="text" class="form-control" [(ngModel)]="proveedor.telefono" id="telefono" name="telefono"
+            required>
+        </div>
+        @if(errors?.telefono){
+        <div class="text-danger">{{ errors.telefono }}</div>
+        }
+
+        <!-- Dirección -->
+        <div class="mb-3">
+          <label for="direccion" class="form-label">Dirección</label>
+          <input type="text" class="form-control" [(ngModel)]="proveedor.direccion" id="direccion" name="direccion"
+            required>
+        </div>
+        @if(errors?.direccion){
+        <div class="text-danger">{{ errors.direccion }}</div>
+        }
+
+       <div class="col-12">
+  <div class="d-flex align-items-start gap-2">
+    <label for="activo" class="form-label mt-2 mb-0">Activo</label>
+    <select id="activo" class="form-select" [(ngModel)]="proveedor.activo" name="activo">
+      <option [ngValue]="true">Sí</option>
+      <option [ngValue]="false">No</option>
+    </select>
+  </div>
+</div>
+
+
+        <!-- Botones -->
+        <div class="d-flex justify-content-start gap-2 mt-3">
+          <button type="submit" class="btn btn-success">
+            {{ editar ? "Editar" : "Guardar" }}
+          </button>
+          <button type="button" class="btn btn-secondary" (click)="onClear(providerForm)">
+            Limpiar formulario
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
