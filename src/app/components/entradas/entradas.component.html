@@ -1,0 +1,70 @@
+<p>entradas works!</p>
+
+
+
+@if (entradas.length > 0) {
+<div class="table-responsive">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Factura</th>
+        <th>Proveedor</th>
+        <th>Usuario</th>
+        <th>Fecha</th>
+        <th>Editar</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      @for (entrada of entradas; track entrada.idEntrada) {
+      <tr>
+        <td>{{ entrada.idEntrada }}</td>
+        <td>{{ entrada.numeroFactura }}</td>
+        <td>{{ entrada.proveedor?.nombre }}</td>
+        <td>{{ entrada.user?.name }}</td>
+        <td>{{ entrada.fecha }}</td>
+
+        <td>
+          <button
+            type="button"
+            class="btn btn-success my-2 btn-sm"
+          >
+            Editar
+          </button>
+        </td>
+
+      
+      </tr>
+      }
+    </tbody>
+  </table>
+</div>
+} @else {
+<p>No hay entradas para mostrar.</p>
+}
+
+<div>
+  @if(paginator && paginator.page) {
+
+  <div class="d-flex justify-content-center align-items-center gap-3 my-3">
+
+    <app-paginacion
+      [paginator]="paginator"
+      [url]="url"
+      [size]="size">
+    </app-paginacion>
+
+    <!-- <input
+      type="number"
+      class="form-control"
+      style="width:90px"
+      min="1"
+      [max]="paginator.page.totalElements"
+      step="5"
+      [(ngModel)]="size"
+      (blur)="actualizarCantidad($event)" /> -->
+  </div>
+
+  }
+</div>

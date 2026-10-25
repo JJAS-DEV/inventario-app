@@ -14,12 +14,12 @@ export class SharingUSerService {
   private _errorFormEventEmitter = new EventEmitter();
   private _selectUserEventEmitter = new EventEmitter();
 
-  private _idUserEventEmitter=new EventEmitter();
+  private _idUserEventEmitter = new EventEmitter();
 
 
 
   constructor(private userservice: UserService, private router: Router) { }
-  get idUserEventEmitter(): EventEmitter<Number>{
+  get idUserEventEmitter(): EventEmitter<Number> {
     return this._idUserEventEmitter
   }
   get newUserEventEmitter(): EventEmitter<User> {
@@ -99,10 +99,23 @@ export class SharingUSerService {
             this.router.navigate(['users/page/0/size/5']);
           });
         },
+
         error: (err) => {
-          if (err.status == 400) {
+
+          // Backend apagado o no accesible
+          if (err.status === 0) {
+            Swal.fire({
+              title: 'Servidor no disponible',
+              text: 'No se pudo conectar con la API.',
+              icon: 'error',
+              confirmButtonText: 'Aceptar'
+            });
+            return;
+          }
+
+          // Error de validación
+          if (err.status === 400) {
             this.errorFormEventEmitter.emit(err.error);
-            console.log(err.error);
 
             Swal.fire({
               title: 'Error de validación',
@@ -110,18 +123,29 @@ export class SharingUSerService {
               icon: 'error',
               confirmButtonText: 'Entendido'
             });
+            return;
           }
+
+          // Otros errores
+          Swal.fire({
+            title: 'Error inesperado',
+            text: err.error?.message || 'Ocurrió un problema en el servidor',
+            icon: 'warning',
+            confirmButtonText: 'Cerrar'
+          });
         }
 
       });
+
+
     }
 
 
   }
 
-  
-  eliminarById(id: number) :void{
-    
+
+  eliminarById(id: number): void {
+
     Swal.fire({
       title: '¿Seguro que quieres eliminarlo?',
       text: 'Esta acción no se puede deshacer',
@@ -142,11 +166,11 @@ export class SharingUSerService {
               confirmButtonText: 'OK'
 
             });
- this.router.navigate(['']).then(() => {
-    // aquí ya estás en la ruta nueva
-    // luego vuelves a la ruta anterior
-    this.router.navigate(['/users/page/0/size/5']);
-  });
+            this.router.navigate(['']).then(() => {
+              // aquí ya estás en la ruta nueva
+              // luego vuelves a la ruta anterior
+              this.router.navigate(['/users/page/0/size/5']);
+            });
           },
           error: (err) => {
             console.error(err);
