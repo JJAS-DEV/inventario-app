@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { catchError, Observable, of } from 'rxjs';
 import { User } from '../../models/User';
 import { Role } from '../../models/Role';
 
@@ -67,7 +67,8 @@ export class UserService {
 
   // agregando user nuevo
   create(user: User): Observable<User> {
-    return this.http.post<User>(this.url, user);
+    return this.http.post<User>(this.url, user)
+  
   }
   //  muesto todos los roles   
   rolesALl(): Observable<Role[]> {
