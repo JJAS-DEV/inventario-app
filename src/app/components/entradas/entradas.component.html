@@ -1,6 +1,166 @@
-<p>entradas works!</p>
+<h1>Entradas de Productos</h1>
+
+@if(!mostrarFiltros) {
+<div class="my-2">
+  <button type="button" class="btn btn-outline-primary" (click)="mostrarFiltros = true">
+    Mostrar filtros
+  </button>
+</div>
+}
+
+@if (mostrarFiltros) {
+<div class="row g-2 mb-3 my-2 border rounded p-3">
+
+  <div class="col-12 d-flex justify-content-between align-items-center mb-2">
+    <h5 class="mb-0">Filtros de Entradas</h5>
+    <button type="button" class="btn-close" (click)="mostrarFiltros = false">
+    </button>
+  </div>
+
+  <!-- Proveedor -->
+ <div class="col-md-6">
+  <label class="form-label">Proveedor</label>
+
+  <div class="position-relative">
+    <input
+      id="proveedorNombre"
+      class="form-control"
+      placeholder="Nombre del proveedor"
+      [(ngModel)]="filtro.proveedorNombre"
+      (ngModelChange)="buscarProveedorname($event)"
+      (focus)="mostrarOpcionesProveedor = true"
+      (blur)="ocultarOpcionesProveedorName()"
+      autocomplete="off" />
+
+    @if (mostrarOpcionesProveedor && opcionesNameProveedor.length > 0) {
+      <div class="list-group username-opciones">
+        @for (opcion of opcionesNameProveedor; track opcion) {
+          <button
+            type="button"
+            class="list-group-item list-group-item-action"
+            (click)="seleccionarProveedorNombre(opcion)">
+            {{ opcion }}
+          </button>
+        }
+      </div>
+    }
+  </div>
+</div>
+
+  <!-- Usuario -->
+  <div class="col-md-6">
+    <label class="form-label">Usuario</label>
+<div class="position-relative flex-grow-1">
+  <input
+    id="nombreusuario"
+    class="form-control"
+    placeholder="Nombre de usuario"
+    [(ngModel)]="filtro.userNombre"
+    (ngModelChange)="buscarUsername($event)"
+    (focus)="mostrarOpcionesusername = true"
+    (blur)="ocultarOpcionesUsername()"
+    autocomplete="off" />
+
+  @if (mostrarOpcionesusername && opcionesUsername.length > 0) {
+    <div class="list-group username-opciones">
+      @for (opcion of opcionesUsername; track opcion) {
+        <button
+          type="button"
+          class="list-group-item list-group-item-action"
+          (click)="seleccionarUserNombre(opcion)">
+          {{ opcion }}
+        </button>
+      }
+    </div>
+  }
+</div>  </div>
+
+  <div class="col-md-4">
+    <label class="form-label">Tipo de búsqueda</label>
+    <select class="form-select" [(ngModel)]="tipoFecha">
+      <option value="FECHA">Por fecha</option>
 
 
+      <option value="RANGO">Rango de fechas</option>
+    </select>
+
+  </div>
+  @if(tipoFecha === 'FECHA') {
+  <div class="col-md-4">
+    <label class="form-label">Fecha</label>
+    <input type="date" class="form-control" [(ngModel)]="filtro.fechaInicio" [(ngModel)]="filtro.fechaFin">
+  </div>
+  }
+
+  @if(tipoFecha === 'RANGO') {
+
+  <div class="col-md-6">
+    <label class="form-label">Fecha inicio</label>
+    <input type="date" class="form-control" [(ngModel)]="filtro.fechaInicio">
+  </div>
+
+  <div class="col-md-6">
+    <label class="form-label">Fecha fin</label>
+    <input type="date" class="form-control" [(ngModel)]="filtro.fechaFin">
+  </div>
+
+  }
+  <!-- Botones -->
+  <div class="col-12 d-flex justify-content-end gap-2">
+    <button class="btn btn-primary" type="button" (click)="buscar()">
+      Buscar
+    </button>
+
+    <button class="btn btn-secondary" type="button" (click)="limpiarFiltros()">
+      Limpiar filtros
+    </button>
+  </div>
+
+</div>
+}
+
+
+<!-- filtro -->
+@if(tieneFiltrosActivos) {
+<div>
+  🔍 Mostrando resultados para:
+
+  @if(filtro.proveedorNombre.trim()) {
+  <span class="badge bg-primary">
+    Proveedor: {{ filtro.proveedorNombre }}
+  </span>
+  }
+
+  @if(filtro.userNombre.trim()) {
+  <span class="badge bg-success">
+    Usuario: {{ filtro.userNombre }}
+  </span>
+  }
+
+  @if(filtro.fechaInicio && filtro.fechaFin) {
+  @if (filtro.fechaInicio === filtro.fechaFin) {
+  <span class="badge bg-info">
+    busqueda por fecha:
+    Fecha: {{ filtro.fechaInicio }}
+  </span>
+  } @else {
+  <span class="badge bg-info">
+        busqueda por fecha:
+
+    Desde: {{ filtro.fechaInicio }} | Hasta: {{ filtro.fechaFin }}
+  </span>
+  }
+  }
+
+  @if(filtro.fechaInicio && !filtro.fechaFin) {
+  <span class="badge bg-info">
+            busqueda por fecha:
+
+    Fecha: {{ filtro.fechaInicio }}
+  </span>
+  }
+</div>
+}
 
 @if (entradas.length > 0) {
 <div class="table-responsive">
@@ -23,18 +183,15 @@
         <td>{{ entrada.numeroFactura }}</td>
         <td>{{ entrada.proveedor?.nombre }}</td>
         <td>{{ entrada.user?.name }}</td>
-        <td>{{ entrada.fecha }}</td>
+        <td>{{ entrada.fecha | date:'dd/MM/yyyy HH:mm' }}</td>
 
         <td>
-          <button
-            type="button"
-            class="btn btn-success my-2 btn-sm"
-          >
+          <button type="button" class="btn btn-success my-2 btn-sm">
             Editar
           </button>
         </td>
 
-      
+
       </tr>
       }
     </tbody>
@@ -45,26 +202,23 @@
 }
 
 <div>
+
   @if(paginator && paginator.page) {
-
   <div class="d-flex justify-content-center align-items-center gap-3 my-3">
+    <div class="d-flex justify-content-center align-items-center gap-3 my-3">
+      <app-paginacion [paginator]="paginator" [url]="url" [size]="size"></app-paginacion>
 
-    <app-paginacion
-      [paginator]="paginator"
-      [url]="url"
-      [size]="size">
-    </app-paginacion>
+      <input type="number" class="form-control" style="width: 90px" min="1" [max]="paginator.page.totalElements"
+        step="5" [(ngModel)]="size" aria-label="Cantidad de usuarios por página" (blur)="actualizarCantidad($event)" />
+    </div>
 
-    <!-- <input
-      type="number"
-      class="form-control"
-      style="width:90px"
-      min="1"
-      [max]="paginator.page.totalElements"
-      step="5"
-      [(ngModel)]="size"
-      (blur)="actualizarCantidad($event)" /> -->
+
   </div>
 
+
+
   }
+
+
+
 </div>
