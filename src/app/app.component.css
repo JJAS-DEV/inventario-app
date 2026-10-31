@@ -1,0 +1,24 @@
+.espacio-nav {
+    margin-top: 15%;
+}
+
+/* Tablet */
+@media (min-width: 768px) {
+    .espacio-nav{
+        margin-top: 10%;
+    }
+}
+
+/* Laptop */
+@media (min-width: 1024px) {
+    .espacio-nav {
+        margin-top: 7%;
+    }
+}
+
+/* Pantallas grandes */
+@media (min-width: 1440px) {
+    .espacio-nav {
+        margin-top: 5%;
+    }
+}
