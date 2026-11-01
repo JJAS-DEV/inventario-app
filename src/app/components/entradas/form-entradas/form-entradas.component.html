@@ -1,0 +1,98 @@
+<div class="container mt-4">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Formulario para entrada</h5>
+        </div>
+        <div class="card-body">
+            <form (ngSubmit)="onSubmit(entradaForm)" #entradaForm="ngForm">
+
+                <!-- Nombre  Proveedor-->
+
+
+                <!-- PROVEEDOR -->
+                <div class="position-relative mb-4">
+
+                    <label for="proveedorNombre" class="form-label">
+                        Nombre del proveedor
+                    </label>
+
+                    <div class="input-group">
+                        <input id="proveedorNombre" name="proveedorNombre" class="form-control"
+                            placeholder="Nombre del proveedor" [(ngModel)]="entrada.proveedor.nombre"
+                            (ngModelChange)="buscarProveedorname($event)" (focus)="mostrarOpcionesProveedor = true"
+                            (blur)="ocultarOpcionesProveedorName()" autocomplete="off" />
+
+                        <button type="button" class="btn btn-outline-primary">
+                            Crear proveedor
+                        </button>
+                    </div>
+
+                    @if (mostrarOpcionesProveedor && opcionesNameProveedor.length > 0) {
+                    <div class="list-group username-opciones">
+                        @for (opcion of opcionesNameProveedor; track opcion) {
+                        <button type="button" class="list-group-item list-group-item-action"
+                            (click)="seleccionarProveedorNombre(opcion)">
+                            {{ opcion }}
+                        </button>
+                        }
+                    </div>
+                    }
+
+                    @if (errorNombreProveedor) {
+                    <div class="text-danger mt-2">
+                        Proveedor no encontrado
+                    </div>
+                    }
+
+                </div>
+
+                <!-- USUARIO -->
+                <div class="position-relative mb-4">
+
+                    <label for="username" class="form-label">
+                        Nombre del usuario
+                    </label>
+
+                    <div class="input-group">
+                        <input id="username" name="username" class="form-control" placeholder="Nombre del usuario"
+                            [(ngModel)]="entrada.user.username" (ngModelChange)="buscarUsername($event)"
+                            (focus)="mostrarOpcionesusername = true" (blur)="ocultarOpcionesUsername()"
+                            autocomplete="off" />
+
+                        <button type="button" class="btn btn-outline-primary">
+                            Crear usuario
+                        </button>
+                    </div>
+
+                    @if (mostrarOpcionesusername && opcionesUsername.length > 0) {
+                    <div class="list-group username-opciones">
+                        @for (opcion of opcionesUsername; track opcion) {
+                        <button type="button" class="list-group-item list-group-item-action"
+                            (click)="seleccionarUsername(opcion)">
+                            {{ opcion }}
+                        </button>
+                        }
+                    </div>
+                    }
+
+                    @if (errorUsername) {
+                    <div class="text-danger mt-2">
+                        Usuario no encontrado
+                    </div>
+                    }
+
+                </div>
+                <!-- Botones -->
+                <div class="d-flex justify-content-start gap-2 mt-3">
+                    <button type="submit" class="btn btn-success">
+                        Guardar
+                    </button>
+                    <button type="button" class="btn btn-secondary" (click)="onClear(entradaForm)">
+                        Limpiar formulario
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>

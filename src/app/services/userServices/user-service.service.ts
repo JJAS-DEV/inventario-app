@@ -16,8 +16,9 @@ export class UserService {
   findAllPageable(page: number, size: Number): Observable<any> {
     return this.http.get<any>(this.url + "?page=" + page + "&size=" + size);
   }
-
-
+  findByNameUsers(username: string): Observable<User> {
+    return this.http.get<User>(this.url + "/buscar-por-username?username=" + username);
+  }
 
   // buscar por  username 
   findByNameUser(username: string): Observable<any> {

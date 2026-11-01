@@ -22,6 +22,8 @@ export class FormProveedorComponent implements OnInit {
     this.proveedor.activo = true;
 
   }
+
+
   ngOnInit(): void {
 
     
@@ -65,6 +67,9 @@ export class FormProveedorComponent implements OnInit {
   editar: boolean = false;
 
   onClear(userForm: NgForm): void {
+       userForm.reset();
+    userForm.resetForm();
+
 
 
 
