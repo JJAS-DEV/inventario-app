@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { ProveedorService } from '../../services/proveevorService/proveedor.service';
 import { UserService } from '../../services/userServices/user-service.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-entradas',
@@ -79,13 +80,39 @@ export class EntradasComponent implements OnInit {
       this.filtro.fechaFin,
       this.page,
       this.size
-    ).subscribe(pageable => {
+    ).subscribe({
+      next: (pageable) => {
 
-      console.log("fecha inicio" + this.filtro.fechaInicio)
+        console.log("fecha inicio", this.filtro.fechaInicio);
 
-      this.entradas = pageable.content;
-      this.paginator = pageable;
-      this.total = pageable.totalElements;
+        this.entradas = pageable.content;
+        this.paginator = pageable;
+        this.total = pageable.totalElements;
+
+      },
+      error: (err) => {
+
+        if (err.status === 400) {
+
+          Swal.fire({
+            icon: 'warning',
+            title: 'Validación',
+            text: err.error.message
+          });
+          this.filtro.fechaInicio = '';
+          this.filtro.fechaFin = '';
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Ocurrió un error inesperado'
+          });
+        }
+
+      }
+
+
+
 
     });
   }
@@ -183,10 +210,17 @@ export class EntradasComponent implements OnInit {
     this.filtro.proveedorNombre = opcion;
     this.opcionesNameProveedor = [];
   }
-   ocultarOpcionesProveedorName(): void {
+  ocultarOpcionesProveedorName(): void {
     setTimeout(() => {
       this.mostrarOpcionesProveedor = false;
     }, 150);
+  }
+
+
+  //crear entrada
+
+   crearEntrada(): void {
+    this.router.navigate(['/entradadform']);
   }
 
 }

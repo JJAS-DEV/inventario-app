@@ -28,6 +28,10 @@ export class ProveedorService {
 
   }
 
+  findByNombre(nombre: string): Observable<Proveedor> {
+    return this.http.get<Proveedor>(this.url + "/buscar-por-nombre?nombre=" + nombre);
+  }
+
   eliminar(id:number){
 
         return this.http.delete<Proveedor>(this.url +"/"+id);
