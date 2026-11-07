@@ -3,10 +3,13 @@ import { Entrada } from '../../../models/Entrada';
 import { FormsModule, NgForm } from '@angular/forms';
 import { ProveedorService } from '../../../services/proveevorService/proveedor.service';
 import { UserService } from '../../../services/userServices/user-service.service';
+import { FormularioEntradaDetalleComponent } from './formulario-entrada-detalle/formulario-entrada-detalle.component';
+import { User } from '../../../models/User';
+import { Proveedor } from '../../../models/Proveedor';
 
 @Component({
   selector: 'app-form-entradas',
-  imports: [FormsModule],
+  imports: [FormsModule, FormularioEntradaDetalleComponent],
   templateUrl: './form-entradas.component.html',
   styleUrl: './form-entradas.component.css'
 })
@@ -32,6 +35,7 @@ export class FormEntradasComponent {
   opcionesNameProveedor: string[] = [];
   mostrarOpcionesProveedor = false;
   errorNombreProveedor: boolean = false;
+  proveedorValido = false;
 
 
   buscarProveedorname(texto: string): void {
@@ -51,6 +55,8 @@ export class FormEntradasComponent {
   }
   seleccionarProveedorNombre(opcion: string): void {
     this.entrada.proveedor.nombre = opcion;
+    this.proveedorValido = true;
+
     this.opcionesNameProveedor = [];
   }
   ocultarOpcionesProveedorName(): void {
@@ -60,12 +66,15 @@ export class FormEntradasComponent {
           this.entrada.proveedor = proveedor;
           console.log('Proveedor seleccionado:', proveedor);
           this.errorNombreProveedor = false;
+          this.proveedorValido = true; // Marca como válido si se encuentra el proveedor
 
         },
         error: (error) => {
           console.error('Error al buscar nombres:', error);
           this.opcionesNameProveedor = [];
           this.errorNombreProveedor = true;
+
+          this.proveedorValido = false;
           // Limpia opciones en caso de error
         }
       });
@@ -80,8 +89,10 @@ export class FormEntradasComponent {
 
   opcionesUsername: string[] = [];
   mostrarOpcionesusername = false;
+  errorUsername: boolean = false;
 
-            errorUsername:boolean   = false;
+  usuarioValido = false;
+
 
 
   buscarUsername(texto: string): void {
@@ -101,29 +112,34 @@ export class FormEntradasComponent {
 
 
 
-    // Aquí puedes filtrar las opciones o consultar el servicio.
   }
-
+  
+  // Aquí puedes filtrar las opciones o consultar el servicio.
   seleccionarUsername(opcion: string): void {
     this.entrada.user.username = opcion;
+    this.usuarioValido = true;
     this.opcionesUsername = [];
 
   }
 
-   ocultarOpcionesUsername(): void {
+  ocultarOpcionesUsername(): void {
     setTimeout(() => {
 
-        this.serviceUser.findByNameUsers(this.entrada.user.username || '').subscribe({
+      this.serviceUser.findByNameUsers(this.entrada.user.username || '').subscribe({
         next: (user) => {
           this.entrada.user = user;
           console.log('Usuario seleccionado:', user);
-          this.errorUsername   = false;
+          this.errorUsername = false;
+          this.usuarioValido = true;
+
 
         },
         error: (error) => {
           console.error('Error al buscar user:', error);
           this.opcionesUsername = [];
           this.errorUsername = true;
+          this.usuarioValido = false;
+
           // Limpia opciones en caso de error
         }
       });
@@ -131,6 +147,13 @@ export class FormEntradasComponent {
     }, 150);
   }
 
+
+  formularioEntradaDetalleComponent: boolean = false;
+
+  vistaFormularioEntradaDetalleComponent(): void {
+    this.formularioEntradaDetalleComponent = true;
+    console.log('Formulario Entrada Detalle Component:', this.formularioEntradaDetalleComponent);
+  }
 
 
 
@@ -141,7 +164,10 @@ export class FormEntradasComponent {
   // }
 
 
-
+  recibirProveedorValido(event: boolean): void {
+    this.formularioEntradaDetalleComponent = event;
+    this.entrada = new Entrada();
+  }
 
 }
 

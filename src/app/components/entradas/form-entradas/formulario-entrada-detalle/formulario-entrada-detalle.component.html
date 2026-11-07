@@ -1,0 +1,132 @@
+<div class="container mt-4">
+
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">📦 Nueva Entrada</h4>
+        </div>
+
+        <div class="card-body">
+
+            <div class="row">
+
+                <!-- Usuario -->
+                <div class="col-md-6 mb-3">
+                    <div class="card border-primary h-100">
+                        <div class="card-header bg-primary text-white">
+                            Usuario
+                        </div>
+
+                        <div class="card-body">
+                            <p><strong>Usuario:</strong> {{ user.username }}</p>
+                            <p><strong>Nombre:</strong> {{ user.name }}</p>
+                            <p><strong>Apellido:</strong> {{ user.lastname }}</p>
+                            <p><strong>Roles:</strong> @for (rol of user.roles; track rol) {
+                                {{ rol.name }}
+                                }</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Proveedor -->
+                <div class="col-md-6 mb-3">
+                    <div class="card border-success h-100">
+                        <div class="card-header bg-success text-white">
+                            Proveedor
+                        </div>
+
+                        <div class="card-body">
+                            <p><strong>Nombre:</strong> {{ Proveedor.nombre }}</p>
+                            <p><strong>Dirección:</strong> {{ Proveedor.direccion }}</p>
+                            <p><strong>Teléfono:</strong> {{ Proveedor.telefono }}</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <hr>
+
+            <!-- Acciones -->
+            <div class="d-flex gap-2 flex-wrap">
+
+                <button type="button" class="btn btn-outline-warning" (click)="proveedorNoEncontrado()">
+                    ✏️ Editar proveedor
+                </button>
+
+                <button type="button" class="btn btn-outline-primary" (click)="mostrarFormularioProducto()">
+                    ➕ Agregar producto
+                </button>
+
+                <button type="button" class="btn btn-success">
+                    ✅ Finalizar entrada
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+
+    @if(formularioProductoVisible){
+    <div class="card mt-3 position-relative">
+
+        <button type="button" class="btn-close position-absolute top-0 end-0 m-3" aria-label="Cerrar"
+            (click)="cerrarFormularioProducto()">
+        </button>
+
+        <div class="card-body">
+            <h3 class="card-title">📦 Formulario producto</h3>
+
+            <label for="proveedorNombre" class="form-label">
+                producto
+            </label>
+
+            <div class="input-group">
+                <input id="proveedorNombre" name="proveedorNombre" class="form-control"
+                    placeholder="Nombre del producto" [(ngModel)]="detalleEntrada.producto.nombre"
+                    (ngModelChange)="buscarNamesProductos($event)" (focus)="mostrarOpcionesProductos = true"
+                    (blur)="ocultarOpcionesProductos()" autocomplete="off" />
+
+
+
+
+            </div>
+            @if (mostrarOpcionesProductos && opcionesProductos.length > 0) {
+            <div class="list-group username-opciones">
+                @for (opcion of opcionesProductos; track opcion) {
+                <button type="button" class="list-group-item list-group-item-action"
+                    (click)="seleccionarProducto(opcion)">
+                    {{ opcion }}
+                </button>
+                }
+            </div>
+            }
+
+            @if (errorPRoducto) {
+            <div class="text-danger mt-2">
+                producto no encontrado
+            </div>
+            }
+            <div class="mb-3">
+                <label class="form-label">Cantidad</label>
+                <input type="number" class="form-control" name="cantidad" [(ngModel)]="detalleEntrada.cantidad"
+                    (blur)="validarMinimo(detalleEntrada,  'cantidad')" min="0" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Precio de compra</label>
+                <input type="number" class="form-control" name="precioCompra" [(ngModel)]="detalleEntrada.precioCompra"
+                    (blur)="validarMinimo(detalleEntrada,'precioCompra')" min="0" step="0.01" required>
+            </div>
+
+            <button type="button" class="btn btn-success" (click)="agregarDetalle()" [disabled]="!formularioValido">
+                ➕ Agregar producto
+            </button>
+            <!-- Aquí va tu formulario -->
+        </div>
+
+
+
+    </div>
+    }
+
+</div>
