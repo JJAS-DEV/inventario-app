@@ -4,6 +4,6 @@ export class DetalleEntrada {
   idDetalleEntrada?: number;
   entradaId?: number;
   producto!: Producto;
-  cantidad!: number;
-  precioCompra!: number;
+  cantidad?: number;
+  precioCompra?: number;
 }

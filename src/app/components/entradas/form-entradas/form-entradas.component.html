@@ -1,3 +1,4 @@
+@if(!formularioEntradaDetalleComponent){
 <div class="container mt-4">
     <div class="card shadow">
         <div class="card-header bg-primary text-white">
@@ -84,8 +85,11 @@
                 </div>
                 <!-- Botones -->
                 <div class="d-flex justify-content-start gap-2 mt-3">
-                    <button type="submit" class="btn btn-success">
-                        Guardar
+                    <button type="submit" class="btn btn-success" [disabled]="  !proveedorValido ||
+      !usuarioValido ||
+      !entrada.proveedor.nombre?.trim() ||
+      !entrada.user.username?.trim()" (click)="vistaFormularioEntradaDetalleComponent()">
+                        listo
                     </button>
                     <button type="button" class="btn btn-secondary" (click)="onClear(entradaForm)">
                         Limpiar formulario
@@ -96,3 +100,14 @@
         </div>
     </div>
 </div>
+
+}
+
+@if(formularioEntradaDetalleComponent){
+<app-formulario-entrada-detalle [Proveedor]="entrada.proveedor" [user]="entrada.user"
+    (proveedorValidoChange)="recibirProveedorValido($event)">
+    >
+    
+
+</app-formulario-entrada-detalle>
+}
