@@ -5,6 +5,7 @@ import { DetalleEntrada } from '../../../../models/DetalleEntrada';
 import { ProductoService } from '../../../../services/producto/producto.service';
 import { FormsModule } from '@angular/forms';
 import { Producto } from '../../../../models/Producto';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-formulario-entrada-detalle',
@@ -35,7 +36,25 @@ export class FormularioEntradaDetalleComponent {
 
 
   proveedorNoEncontrado() {
-    this.proveedorValidoChange.emit(false);
+
+ Swal.fire({
+    title: '¿Cambiar proveedor?',
+    text: 'Si modificas el proveedor, se eliminarán todos los productos agregados a la entrada.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Sí, cambiar',
+    cancelButtonText: 'Cancelar',
+    confirmButtonColor: '#d33'
+  }).then((result) => {
+
+    if (result.isConfirmed) {
+
+
+      this.proveedorValidoChange.emit(false);
+
+    }
+
+  });
   }
   EnvioDetalleEntrada() {
     this.detalleSeleccionado.emit(this.detalleEntrada);
@@ -64,10 +83,11 @@ export class FormularioEntradaDetalleComponent {
   mostrarOpcionesProductos = false;
   errorPRoducto:boolean=false;
 
+  
   buscarNamesProductos(texto: string): void {
     console.log('Texto escrito:', texto);
 
-    this.serviceProducto.findListNamesProductos(texto).subscribe({
+    this.serviceProducto.findListNamesProductosWithIdPRovedor(texto,this.Proveedor.idProveedor).subscribe({
       next: (response: string[]) => {
         // Si el backend devuelve directamente una lista de usernames
         this.opcionesProductos = response;
@@ -178,12 +198,19 @@ export class FormularioEntradaDetalleComponent {
 
 
 agregarDetalle(){
-
+  
+  this.detalleSeleccionado.emit({
+    ...this.detalleEntrada
+  });
+  this.detalleEntrada = new DetalleEntrada();
+  this.detalleEntrada= {
+  producto: new Producto()
+};
   console.log(this.detalleEntrada);
 
+
+
   }
-
-
 
 
 
