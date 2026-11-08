@@ -1,6 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Entrada } from '../../models/Entrada';
 
 @Injectable({
   providedIn: 'root'
@@ -50,4 +51,14 @@ filtrarEntradas(
     `${this.url}/filtrar`,
     { params }
   );
-}}
+}
+
+
+
+  create(entrada: Entrada): Observable<any> {
+    return this.http.post<Entrada>(this.url, entrada);
+  }
+
+
+}
+

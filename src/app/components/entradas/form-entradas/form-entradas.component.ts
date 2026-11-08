@@ -6,10 +6,14 @@ import { UserService } from '../../../services/userServices/user-service.service
 import { FormularioEntradaDetalleComponent } from './formulario-entrada-detalle/formulario-entrada-detalle.component';
 import { User } from '../../../models/User';
 import { Proveedor } from '../../../models/Proveedor';
+import { DetalleEntrada } from '../../../models/DetalleEntrada';
+import { CurrencyPipe } from '@angular/common';
+import { EntradaServiceService } from '../../../services/Entrada/entrada-service.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-form-entradas',
-  imports: [FormsModule, FormularioEntradaDetalleComponent],
+  imports: [FormsModule, FormularioEntradaDetalleComponent, CurrencyPipe],
   templateUrl: './form-entradas.component.html',
   styleUrl: './form-entradas.component.css'
 })
@@ -17,7 +21,7 @@ export class FormEntradasComponent {
 
   entrada!: Entrada;
 
-  constructor(private serviceProveedor: ProveedorService, private serviceUser: UserService) {
+  constructor(private serviceProveedor: ProveedorService, private serviceUser: UserService, private entradaService: EntradaServiceService) {
     this.entrada = new Entrada();
   }
 
@@ -113,7 +117,7 @@ export class FormEntradasComponent {
 
 
   }
-  
+
   // Aquí puedes filtrar las opciones o consultar el servicio.
   seleccionarUsername(opcion: string): void {
     this.entrada.user.username = opcion;
@@ -161,12 +165,85 @@ export class FormEntradasComponent {
 
 
 
+
+
+
+
+
   // }
 
-
+  //bandera para cambiar proveedor
   recibirProveedorValido(event: boolean): void {
     this.formularioEntradaDetalleComponent = event;
     this.entrada = new Entrada();
+  }
+
+  //agrcion de detalle entrada
+
+  recibirDetalle(detalle: DetalleEntrada) {
+    console.log(detalle);
+    const existente = this.entrada.detalles.find(
+      d => d.producto.idProducto === detalle.producto.idProducto
+    );
+
+    if (existente) {
+
+      existente.cantidad =
+        (existente.cantidad ?? 0) + (detalle.cantidad ?? 0);
+
+    } else {
+
+      this.entrada.detalles.push({
+        ...detalle
+      });
+
+    }
+
+  }
+
+  eliminarDetalle(index: number) {
+    this.entrada.detalles.splice(index, 1);
+  }
+
+  calcularTotal(): number {
+    return this.entrada.detalles.reduce(
+      (total, d) => total + (d.cantidad ?? 0) * (d.precioCompra ?? 0),
+      0
+    );
+  }
+  guardarEntrada() {
+    console.log("entrada creada")
+    console.log(this.entrada)
+    console.log(JSON.stringify(this.entrada, null, 2));
+    this.entradaService.create(this.entrada).subscribe({
+
+      next: (response) => {
+
+
+        Swal.fire({
+          icon: 'success',
+          title: 'Entrada registrada',
+          text: 'La entrada se registró correctamente.'
+        });
+
+        this.entrada = new Entrada();
+        this.proveedorValido = false;
+        this.usuarioValido = false;
+
+      },
+      error: (err) => {
+
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: err.error?.message || 'No fue posible registrar la entrada.'
+        });
+
+      }
+    })
+
+
+
   }
 
 }

@@ -1,4 +1,5 @@
 export class Producto {
+  
   idProducto!: number;
   sku!: string;
   nombre: string="";
@@ -6,9 +7,7 @@ export class Producto {
   precioCompra!: number;
   precioVenta!: number;
   stockMinimo!: number;
-  creadoEn!: string;
   nombreProveedor!:string;
-  
   stock!: number;
   activo!: boolean;
 }
