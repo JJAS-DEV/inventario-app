@@ -1,0 +1,163 @@
+<form (ngSubmit)="onSubmit(productoForm)" #productoForm="ngForm" class="p-4 rounded-4 bg-dark text-light">
+
+
+
+    <!-- Nombre -->
+    <div class="mb-3">
+        <label for="nombre" class="form-label">Nombre</label>
+        <input type="text" class="form-control form-control-lg" [(ngModel)]="producto.nombre" id="nombre" name="nombre"
+            required>
+        @if(errors?.nombre){
+        <div class="text-danger mt-1">
+            {{ errors.nombre }}
+        </div>
+        }
+    </div>
+
+    <!-- Descripción -->
+    <div class="mb-3">
+        <label for="descripcion" class="form-label">Descripción</label>
+        <textarea class="form-control" [(ngModel)]="producto.descripcion" id="descripcion" name="descripcion" rows="3">
+        </textarea>
+
+        @if(errors?.descripcion){
+        <div class="text-danger mt-1">
+            {{ errors.descripcion }}
+        </div>
+        }
+    </div>
+
+    <!-- Precios -->
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label for="precioCompra" class="form-label">
+                Precio Compra
+            </label>
+
+            <input type="number" class="form-control" [(ngModel)]="producto.precioCompra" id="precioCompra"
+                name="precioCompra" (blur)="validarMinimo(producto,'precioCompra')" min="0" required>
+
+            @if(errors?.precioCompra){
+            <div class="text-danger mt-1">
+                {{ errors.precioCompra }}
+            </div>
+            }
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <label for="precioVenta" class="form-label">
+                Precio Venta
+            </label>
+
+            <input type="number" class="form-control" [(ngModel)]="producto.precioVenta" id="precioVenta"
+                name="precioVenta" (blur)="validarMinimo(producto,'precioVenta')" min="0" required>
+
+            @if(errors?.precioVenta){
+            <div class="text-danger mt-1">
+                {{ errors.precioVenta }}
+            </div>
+            }
+        </div>
+    </div>
+
+    <!-- Stock -->
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label for="stock" class="form-label">Stock</label>
+
+            <input type="number" class="form-control" [(ngModel)]="producto.stock" id="stock" name="stock"
+                (blur)="validarMinimo(producto,'stock')" min="0" required>
+
+            @if(errors?.stock){
+            <div class="text-danger mt-1">
+                {{ errors.stock }}
+            </div>
+            }
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <label class="form-label">Stock Mínimo</label>
+
+            <input type="number" class="form-control" [(ngModel)]="producto.stockMinimo" name="stockMinimo"
+                (blur)="validarMinimo(producto,'stockMinimo')" min="0" required>
+
+            @if(errors?.stockMinimo){
+            <div class="text-danger mt-1">
+                {{ errors.stockMinimo }}
+            </div>
+            }
+        </div>
+    </div>
+
+    <!-- Proveedor -->
+    <div class="mb-3">
+        <label class="form-label">
+            Proveedor Seleccionado
+        </label>
+
+        <div class="form-control bg-secondary text-white">
+            {{ proveedor?.nombre || 'Sin proveedor seleccionado' }}
+        </div>
+
+
+        @if(errors?.proveedor){
+        <div class="text-danger mt-1">
+            {{ errors.proveedor }}
+        </div>
+        }
+    </div>
+    <!-- categoria -->
+    <div >
+
+        <div >
+
+            <label for="proveedorNombre" class="form-label">
+                categoria
+            </label>
+
+
+
+            <app-buscador-categoria (categoriaSeleccionada)="recibirCategoria($event)">
+
+            </app-buscador-categoria>
+
+
+<div class="text-danger mt-1">
+            {{ errors.categoria }}
+        </div>
+
+
+
+
+
+        </div>
+    </div>
+
+
+
+    <!-- Activo -->
+    <div class="mb-4">
+        <label for="activo" class="form-label">
+            Estado
+        </label>
+
+        <select class="form-select" [(ngModel)]="producto.activo" id="activo" name="activo">
+
+            <option [ngValue]="true">Activo</option>
+            <option [ngValue]="false">Inactivo</option>
+
+        </select>
+    </div>
+
+    <!-- Botones -->
+    <div class="d-flex justify-content-end gap-2">
+        <button type="submit" class="btn btn-success px-4" (click)="agregarProducto()">
+            agregar producto
+        </button>
+
+        <button type="button" class="btn btn-outline-light" (click)="onClear(productoForm)">
+            Limpiar
+        </button>
+    </div>
+
+</form>

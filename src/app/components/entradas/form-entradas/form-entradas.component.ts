@@ -10,6 +10,7 @@ import { DetalleEntrada } from '../../../models/DetalleEntrada';
 import { CurrencyPipe } from '@angular/common';
 import { EntradaServiceService } from '../../../services/Entrada/entrada-service.service';
 import Swal from 'sweetalert2';
+import { EventoEntradaSharingService } from '../../../services/Entrada/EventoSharing/evento-entrada-sharing.service';
 
 @Component({
   selector: 'app-form-entradas',
@@ -21,8 +22,21 @@ export class FormEntradasComponent {
 
   entrada!: Entrada;
 
-  constructor(private serviceProveedor: ProveedorService, private serviceUser: UserService, private entradaService: EntradaServiceService) {
+  constructor(private serviceProveedor: ProveedorService, private serviceUser: UserService, private entradaService: EntradaServiceService, private entradaSharing: EventoEntradaSharingService) {
     this.entrada = new Entrada();
+
+
+  }
+
+  ngOnInit(): void {
+
+    this.entradaSharing.detalleEntrada.subscribe(detalle => {
+      console.log('RECIBI EVENTO' + detalle);
+
+      this.recibirDetalle(detalle);
+
+    });
+
   }
 
   onSubmit(userForm: NgForm): void {
@@ -181,24 +195,35 @@ export class FormEntradasComponent {
   //agrcion de detalle entrada
 
   recibirDetalle(detalle: DetalleEntrada) {
-    console.log(detalle);
+
+    console.log("DETALLE NUEVO", detalle);
+    console.log("ANTES", this.entrada.detalles);
+
     const existente = this.entrada.detalles.find(
-      d => d.producto.idProducto === detalle.producto.idProducto
+      d => d.producto.nombre === detalle.producto.nombre
     );
 
+    console.log("EXISTENTE", existente);
+
     if (existente) {
+
+      console.log("SUMANDO CANTIDAD");
 
       existente.cantidad =
         (existente.cantidad ?? 0) + (detalle.cantidad ?? 0);
 
     } else {
 
+      console.log("HACIENDO PUSH");
+
       this.entrada.detalles.push({
-        ...detalle
+        ...detalle,
       });
 
     }
 
+    console.log("DESPUES", this.entrada.detalles);
+    console.log("TOTAL", this.entrada.detalles.length);
   }
 
   eliminarDetalle(index: number) {

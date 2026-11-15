@@ -1,0 +1,28 @@
+        <div >
+                <input id="proveedorNombre" name="proveedorNombre" class="form-control"
+                    placeholder="Nombre del producto" [(ngModel)]="categoria.nombre"
+                    (ngModelChange)="BuscarCategoriabyName($event)" (focus)="mostrarOpcionesProductos = true"
+                    (blur)="ocultarOpcionesCategoria()" autocomplete="off" />
+
+        
+
+
+
+            </div>
+
+            @if (mostrarOpcionesProductos && opcionesNombresCategoria.length > 0) {
+            <div class="list-group username-opciones">
+                @for (opcion of opcionesNombresCategoria; track opcion) {
+                <button type="button" class="list-group-item list-group-item-action"
+                    (click)="seleccionarProducto(opcion)">
+                    {{ opcion.nombre }}
+                </button>
+                }
+            </div>
+            }
+
+            @if (errorPRoducto) {
+            <div class="text-danger mt-2">
+                categoria no encontrada
+            </div>
+            }

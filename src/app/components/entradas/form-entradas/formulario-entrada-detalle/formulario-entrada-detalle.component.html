@@ -83,10 +83,22 @@
                     (ngModelChange)="buscarNamesProductos($event)" (focus)="mostrarOpcionesProductos = true"
                     (blur)="ocultarOpcionesProductos()" autocomplete="off" />
 
+                <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
+                    data-bs-target="#modalOscuro" (click)="abrirModalProductos()">
+                    Crear producto
+                </button>
+
+
+
+
+
+
+
 
 
 
             </div>
+
             @if (mostrarOpcionesProductos && opcionesProductos.length > 0) {
             <div class="list-group username-opciones">
                 @for (opcion of opcionesProductos; track opcion) {
@@ -125,5 +137,30 @@
 
     </div>
     }
+
+
+
+
+    <div class="modal fade" id="modalOscuro" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content bg-dark text-light">
+
+                <div class="modal-header border-secondary">
+                    <h5 class="modal-title">crear producto</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar">
+                    </button>
+                </div>
+
+                @if (Proveedor) {
+                <app-crear-producto [proveedor]="Proveedor">
+                </app-crear-producto>
+                }
+
+            </div>
+        </div>
+    </div>
+
+
+
 
 </div>
