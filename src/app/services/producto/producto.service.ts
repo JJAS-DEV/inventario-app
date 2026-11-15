@@ -23,7 +23,12 @@ export class ProductoService {
     );
 
   }
-
+VerificarProducto(producto: Producto): Observable<any> {
+  return this.http.post<Producto>(
+    `${this.url}/verificarProducto`,
+    producto
+  );
+}
   //lista de nombres de productos por nombre e idProveedor
 
   findListNamesProductosWithIdPRovedor(

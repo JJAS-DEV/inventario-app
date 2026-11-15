@@ -107,7 +107,6 @@
 @if(formularioEntradaDetalleComponent){
 <app-formulario-entrada-detalle [Proveedor]="entrada.proveedor" [user]="entrada.user"
     (proveedorValidoChange)="recibirProveedorValido($event)"
-    (detalleSeleccionado)="recibirDetalle($event)">
     >
 </app-formulario-entrada-detalle>
 
@@ -119,7 +118,6 @@
             <tr>
                 <th>#</th>
              
-                <th>ID Producto</th>
                 <th>Producto</th>
                 <th>Cantidad</th>
                 <th>Precio Compra</th>
@@ -133,7 +131,6 @@
         <tr>
             <td>{{ i + 1 }}</td>
 
-            <td>{{ detalle.producto.idProducto }}</td>
             <td>{{ detalle.producto.nombre }}</td>
             <td>{{ detalle.cantidad }}</td>
             <td>{{ detalle.precioCompra }}</td>

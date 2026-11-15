@@ -6,10 +6,16 @@ import { ProductoService } from '../../../../services/producto/producto.service'
 import { FormsModule } from '@angular/forms';
 import { Producto } from '../../../../models/Producto';
 import Swal from 'sweetalert2';
+import { CrearProductoComponent } from './crear-producto/crear-producto.component';
+import { EventoEntradaSharingService } from '../../../../services/Entrada/EventoSharing/evento-entrada-sharing.service';
+import { Entrada } from '../../../../models/Entrada';
 
+import { Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-formulario-entrada-detalle',
-  imports: [FormsModule],
+  imports: [FormsModule, CrearProductoComponent],
   templateUrl: './formulario-entrada-detalle.component.html',
   styleUrl: './formulario-entrada-detalle.component.css'
 })
@@ -25,7 +31,10 @@ export class FormularioEntradaDetalleComponent {
 
   detalleEntrada: DetalleEntrada;
 
-  constructor(private serviceProducto: ProductoService) {
+  constructor(private serviceProducto: ProductoService,private entradaService:EventoEntradaSharingService
+    ,  @Inject(PLATFORM_ID) private platformId: Object
+
+  ) {
 
     this.detalleEntrada= new DetalleEntrada();
     this.detalleEntrada= {
@@ -198,10 +207,10 @@ export class FormularioEntradaDetalleComponent {
 
 
 agregarDetalle(){
+
+  this.entradaService.detalleEntrada.emit(this.detalleEntrada);
   
-  this.detalleSeleccionado.emit({
-    ...this.detalleEntrada
-  });
+ 
   this.detalleEntrada = new DetalleEntrada();
   this.detalleEntrada= {
   producto: new Producto()
@@ -212,7 +221,27 @@ agregarDetalle(){
 
   }
 
+//abrir modal
+
+
+abrirModadProductos:boolean=false;
+productoEnviar!:Producto;
+abrirModalProductos(){
+
+
+  this.abrirModadProductos=true;
+
+
+}
 
 
 
+
+  ngOnInit(): void {
+
+
+
+  }
+
+  
 }
