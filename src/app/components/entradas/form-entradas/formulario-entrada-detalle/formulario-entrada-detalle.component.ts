@@ -1,4 +1,4 @@
-import { Component, EventEmitter, input, Input, output, Output } from '@angular/core';
+import { Component, EventEmitter, input, Input, OnInit, output, Output } from '@angular/core';
 import { Proveedor } from '../../../../models/Proveedor';
 import { User } from '../../../../models/User';
 import { DetalleEntrada } from '../../../../models/DetalleEntrada';
@@ -19,7 +19,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './formulario-entrada-detalle.component.html',
   styleUrl: './formulario-entrada-detalle.component.css'
 })
-export class FormularioEntradaDetalleComponent {
+export class FormularioEntradaDetalleComponent  implements OnInit  {
 
   @Input() Proveedor!: Proveedor;
   @Input() user!: User;
@@ -29,10 +29,12 @@ export class FormularioEntradaDetalleComponent {
   @Output()
   detalleSeleccionado = new EventEmitter<DetalleEntrada>();
 
+
+
   detalleEntrada: DetalleEntrada;
 
   constructor(private serviceProducto: ProductoService,private entradaService:EventoEntradaSharingService
-    ,  @Inject(PLATFORM_ID) private platformId: Object
+    ,  @Inject(PLATFORM_ID) private platformId: Object,private eventoEntrada:EventoEntradaSharingService
 
   ) {
 
@@ -42,6 +44,20 @@ export class FormularioEntradaDetalleComponent {
 };
 
   }
+
+    ngOnInit(): void {
+
+      this.eventoEntrada.cerrarModal.subscribe(() => {
+
+        this.cerrarModal();
+    });
+
+
+
+  }
+
+
+  
 
 
   proveedorNoEncontrado() {
@@ -234,14 +250,17 @@ abrirModalProductos(){
 
 }
 
+cerrarModal(){
+
+this.abrirModadProductos=false;
+
+
+}
 
 
 
-  ngOnInit(): void {
 
 
-
-  }
 
   
 }

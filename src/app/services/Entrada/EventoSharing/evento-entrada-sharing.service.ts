@@ -13,7 +13,11 @@ export class EventoEntradaSharingService {
   private _errorFormEventEmitter = new EventEmitter();
   private _detalleEntrada = new EventEmitter();
   private _producto = new EventEmitter();
+private _cerrarModal = new EventEmitter<void>();
 
+get cerrarModal(): EventEmitter<void> {
+  return this._cerrarModal;
+}
 
   productoCreadoEventEmitter = new EventEmitter<void>();
 
@@ -29,7 +33,7 @@ export class EventoEntradaSharingService {
     return this._detalleEntrada;
   }
 
-detalleEntradas!:DetalleEntrada;
+  detalleEntradas!: DetalleEntrada;
 
 
   constructor(private productoService: ProductoService) {
@@ -58,8 +62,11 @@ detalleEntradas!:DetalleEntrada;
           } as DetalleEntrada);
 
           this.producto.emit({
-            ...producto
-          });
+            proveedor: producto.proveedor
+          } as Producto);
+
+          this._cerrarModal.emit();
+
 
 
         });
