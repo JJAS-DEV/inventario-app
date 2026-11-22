@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { EntradaDto } from '../../Dto/EntradaDto';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { EntradaServiceService } from '../../services/Entrada/entrada-service.service';
 import { PaginacionComponent } from '../paginacion/paginacion.component';
 import { FormsModule } from '@angular/forms';
@@ -11,7 +11,7 @@ import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-entradas',
-  imports: [PaginacionComponent, FormsModule, DatePipe],
+  imports: [PaginacionComponent, FormsModule, DatePipe,RouterLink],
   templateUrl: './entradas.component.html',
   styleUrl: './entradas.component.css'
 })
@@ -21,6 +21,8 @@ export class EntradasComponent implements OnInit {
       this.page = Number(params.get('page') ?? 0);
       this.cargarEntradas();
     });
+
+    
 
 
   }

@@ -5,18 +5,24 @@ import { FormEntradasComponent } from "../components/entradas/form-entradas/form
 export const routersEntradas: Routes =
     [
         {
-                path: 'entradad/page/:page/size/:size',
-                component: EntradasComponent
-            },
+            path: 'entradad/page/:page/size/:size',
+            component: EntradasComponent
+        },
 
-            {
-                path: 'entradadform',
-                component: FormEntradasComponent
-            }
+        {
+            path: 'entradadform',
+            component: FormEntradasComponent
+        },
+
+        {
+            path: 'entradad/edit/:id',
+            component: FormEntradasComponent
+
+        }
 
 
-               
-                
+
+
 
 
     ];
