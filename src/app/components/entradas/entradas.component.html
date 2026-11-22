@@ -190,7 +190,9 @@
         <td>{{ entrada.fecha | date:'dd/MM/yyyy HH:mm' }}</td>
 
         <td>
-          <button type="button" class="btn btn-success my-2 btn-sm">
+          
+          <button  [routerLink]="['/entradad/edit/'+entrada.idEntrada]"
+          type="button" class="btn btn-success my-2 btn-sm">
             Editar
           </button>
         </td>

@@ -24,7 +24,6 @@ filtrarEntradas(
   page = 0,
   size = 5
 ): Observable<any> {
-
   let params = new HttpParams()
     .set('page', page)
     .set('size', size);
@@ -46,7 +45,6 @@ filtrarEntradas(
   }
 
   
-
   return this.http.get<any>(
     `${this.url}/filtrar`,
     { params }
@@ -55,9 +53,23 @@ filtrarEntradas(
 
 
 
+
+
+
   create(entrada: Entrada): Observable<any> {
     return this.http.post<Entrada>(this.url, entrada);
   }
+  buscarById(idEntrada:number):Observable<any>{
+
+    return this.http.get<Entrada>(this.url+"/"+idEntrada)
+
+  }
+
+  updateEntrada(idEntrada:number,entrada:Entrada):Observable<any>{
+        return this.http.put<Entrada>(this.url+"/"+idEntrada,entrada)
+
+  }
+
 
 
 }

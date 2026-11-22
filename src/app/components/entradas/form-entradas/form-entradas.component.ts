@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Entrada } from '../../../models/Entrada';
 import { FormsModule, NgForm } from '@angular/forms';
 import { ProveedorService } from '../../../services/proveevorService/proveedor.service';
@@ -11,6 +11,7 @@ import { CurrencyPipe } from '@angular/common';
 import { EntradaServiceService } from '../../../services/Entrada/entrada-service.service';
 import Swal from 'sweetalert2';
 import { EventoEntradaSharingService } from '../../../services/Entrada/EventoSharing/evento-entrada-sharing.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-form-entradas',
@@ -18,26 +19,56 @@ import { EventoEntradaSharingService } from '../../../services/Entrada/EventoSha
   templateUrl: './form-entradas.component.html',
   styleUrl: './form-entradas.component.css'
 })
-export class FormEntradasComponent {
+export class FormEntradasComponent implements OnInit {
 
   entrada!: Entrada;
 
-  constructor(private serviceProveedor: ProveedorService, private serviceUser: UserService, private entradaService: EntradaServiceService, private entradaSharing: EventoEntradaSharingService) {
+  constructor(private serviceProveedor: ProveedorService,
+    private serviceUser: UserService,
+    private entradaService: EntradaServiceService,
+    private entradaSharing: EventoEntradaSharingService,
+    private param: ActivatedRoute) {
     this.entrada = new Entrada();
 
 
   }
 
+  editarEntradas:boolean=false;
+
   ngOnInit(): void {
 
     this.entradaSharing.detalleEntrada.subscribe(detalle => {
-      console.log('RECIBI EVENTO' + detalle);
-
       this.recibirDetalle(detalle);
-
     });
 
+
+      this.param.paramMap.subscribe(params=>{
+      const id:number=+(params.get('id')||'0');
+
+      if(id !== undefined && id > 0){
+        this.editarEntradas=true;
+        this.entradaService.buscarById(id).subscribe( {
+          next:(entrada)=>{
+            this.entrada=entrada;
+            this.formularioEntradaDetalleComponent=true;
+          },
+          error:err=>{
+            console.error('ocurrio un error');
+            console.error(err);
+          }
+      
+        });
+        // this.SharingData.findUserByIdEventEmitter.emit(id); 
+      }
+    }
+    )
+
   }
+    
+
+
+
+  
 
   onSubmit(userForm: NgForm): void {
     console.log(this.entrada)
@@ -241,6 +272,43 @@ export class FormEntradasComponent {
     console.log(this.entrada)
     console.log(JSON.stringify(this.entrada, null, 2));
     this.entradaService.create(this.entrada).subscribe({
+
+      next: (response) => {
+
+
+        Swal.fire({
+          icon: 'success',
+          title: 'Entrada registrada',
+          text: 'La entrada se registró correctamente.'
+        });
+
+        this.entrada = new Entrada();
+        this.proveedorValido = false;
+        this.usuarioValido = false;
+
+      },
+      error: (err) => {
+
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: err.error?.message || 'No fue posible registrar la entrada.'
+        });
+
+      }
+    })
+
+
+
+  }
+
+
+  editarEntrada(){
+
+     console.log("editar entrada")
+    console.log(this.entrada)
+    console.log(JSON.stringify(this.entrada, null, 2));
+    this.entradaService.updateEntrada(this.entrada.idEntrada,this.entrada).subscribe({
 
       next: (response) => {
 
