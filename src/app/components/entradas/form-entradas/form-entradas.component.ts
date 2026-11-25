@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Entrada } from '../../../models/Entrada';
-import { FormsModule, NgForm } from '@angular/forms';
+import { FormsModule, NgForm, NonNullableFormBuilder } from '@angular/forms';
 import { ProveedorService } from '../../../services/proveevorService/proveedor.service';
 import { UserService } from '../../../services/userServices/user-service.service';
 import { FormularioEntradaDetalleComponent } from './formulario-entrada-detalle/formulario-entrada-detalle.component';
@@ -11,11 +11,12 @@ import { CurrencyPipe } from '@angular/common';
 import { EntradaServiceService } from '../../../services/Entrada/entrada-service.service';
 import Swal from 'sweetalert2';
 import { EventoEntradaSharingService } from '../../../services/Entrada/EventoSharing/evento-entrada-sharing.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { BuscadorCategoriaComponent } from '../../buscadores/buscadorCategoria/buscador-categoria/buscador-categoria.component';
 
 @Component({
   selector: 'app-form-entradas',
-  imports: [FormsModule, FormularioEntradaDetalleComponent, CurrencyPipe],
+  imports: [FormsModule, FormularioEntradaDetalleComponent, CurrencyPipe, BuscadorCategoriaComponent],
   templateUrl: './form-entradas.component.html',
   styleUrl: './form-entradas.component.css'
 })
@@ -23,17 +24,21 @@ export class FormEntradasComponent implements OnInit {
 
   entrada!: Entrada;
 
-  constructor(private serviceProveedor: ProveedorService,
+  constructor(
+    private serviceProveedor: ProveedorService,
     private serviceUser: UserService,
     private entradaService: EntradaServiceService,
     private entradaSharing: EventoEntradaSharingService,
-    private param: ActivatedRoute) {
+    private param: ActivatedRoute,
+    private router: Router
+
+  ) {
     this.entrada = new Entrada();
 
 
   }
 
-  editarEntradas:boolean=false;
+  editarEntradas: boolean = false;
 
   ngOnInit(): void {
 
@@ -42,21 +47,21 @@ export class FormEntradasComponent implements OnInit {
     });
 
 
-      this.param.paramMap.subscribe(params=>{
-      const id:number=+(params.get('id')||'0');
+    this.param.paramMap.subscribe(params => {
+      const id: number = +(params.get('id') || '0');
 
-      if(id !== undefined && id > 0){
-        this.editarEntradas=true;
-        this.entradaService.buscarById(id).subscribe( {
-          next:(entrada)=>{
-            this.entrada=entrada;
-            this.formularioEntradaDetalleComponent=true;
+      if (id !== undefined && id > 0) {
+        this.editarEntradas = true;
+        this.entradaService.buscarById(id).subscribe({
+          next: (entrada) => {
+            this.entrada = entrada;
+            this.formularioEntradaDetalleComponent = true;
           },
-          error:err=>{
+          error: err => {
             console.error('ocurrio un error');
             console.error(err);
           }
-      
+
         });
         // this.SharingData.findUserByIdEventEmitter.emit(id); 
       }
@@ -64,11 +69,11 @@ export class FormEntradasComponent implements OnInit {
     )
 
   }
-    
 
 
 
-  
+
+
 
   onSubmit(userForm: NgForm): void {
     console.log(this.entrada)
@@ -261,6 +266,8 @@ export class FormEntradasComponent implements OnInit {
     this.entrada.detalles.splice(index, 1);
   }
 
+
+
   calcularTotal(): number {
     return this.entrada.detalles.reduce(
       (total, d) => total + (d.cantidad ?? 0) * (d.precioCompra ?? 0),
@@ -281,10 +288,11 @@ export class FormEntradasComponent implements OnInit {
           title: 'Entrada registrada',
           text: 'La entrada se registró correctamente.'
         });
-
-        this.entrada = new Entrada();
+        this.formularioEntradaDetalleComponent = false;
         this.proveedorValido = false;
         this.usuarioValido = false;
+        this.router.navigate(['/entradad/page/0/size/5']);
+
 
       },
       error: (err) => {
@@ -303,25 +311,26 @@ export class FormEntradasComponent implements OnInit {
   }
 
 
-  editarEntrada(){
+  editarEntrada() {
 
-     console.log("editar entrada")
+    console.log("editar entrada")
     console.log(this.entrada)
     console.log(JSON.stringify(this.entrada, null, 2));
-    this.entradaService.updateEntrada(this.entrada.idEntrada,this.entrada).subscribe({
+    this.entradaService.updateEntrada(this.entrada.idEntrada, this.entrada).subscribe({
 
       next: (response) => {
 
 
         Swal.fire({
           icon: 'success',
-          title: 'Entrada registrada',
-          text: 'La entrada se registró correctamente.'
+          title: 'Entrada edito correctamente',
+          text: 'La entrada se edito correctamente.'
         });
-
-        this.entrada = new Entrada();
+        this.formularioEntradaDetalleComponent = false;
         this.proveedorValido = false;
         this.usuarioValido = false;
+        this.router.navigate(['/entradad/page/0/size/5']);
+
 
       },
       error: (err) => {
@@ -338,6 +347,30 @@ export class FormEntradasComponent implements OnInit {
 
 
   }
+
+  //----------------------------------editar detalles entrada----------------------
+
+  mostrarEditarModal: boolean = false;
+
+  indice_editar: number = -1;
+
+
+  editarDetalle(index: number) {
+
+    this.mostrarEditarModal = true;
+    this.indice_editar = index;
+
+  }
+
+  guardarEdicion(cantidad: string, precioCompra: string): void {
+
+    this.entrada.detalles[this.indice_editar].cantidad = +cantidad;
+    this.entrada.detalles[this.indice_editar].precioCompra = +precioCompra;
+    this.mostrarEditarModal = false;
+    
+  }
+
+
 
 }
 
